@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //the player movement script to walk/attack
 public class PlayerController : MonoBehaviour
@@ -49,6 +50,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask attackableLayer;
     [SerializeField] float damage;//the amount of damage the player deals
 
+    //this is to stop the game for a bit when hit to let the player bear what just happened and gain their surroundings
+    bool restoreTime;
+    float restoreTimeSpeed;
+
     //the below will be once the slashEffect animation is made
     // [SerializeField] GameObject slashEffect;
     [Space(5)]
@@ -64,6 +69,27 @@ public class PlayerController : MonoBehaviour
     [Header("Player Health Settings")]
     public int playerHealth;
     public int maxPlayerHealth;
+    //this is for the particles of when the player is hit to signify they're hit(will be better once blood circle's created for the material)
+    [SerializeField] GameObject bloodSpurt;
+    //flashing the player sprite to signify they're invincible
+    [SerializeField] float hitFlashSpeed;
+    //responsible for any updates we may need with the hearts
+    public delegate void OnHealthChangedDelegate();
+    [HideInInspector] public OnHealthChangedDelegate onHealthChangedCallback;
+
+    //limits the speed of healing
+    float healTimer;
+    [SerializeField] float timeToHeal;
+    [Space(5)]
+
+    //this will be the "mana" from hollow knight allowing the player to do actions(refer to part 4 of tutorials)
+    [Header("Ability settings")]
+    [SerializeField] Image abilityStorage;
+
+    [SerializeField] float abilityLimit;
+    [SerializeField] float abilityDrainSpeed;
+    [SerializeField] float abilityGain;
+
     [Space(5)]
 
     //the bool for if the player is dashing
@@ -73,6 +99,9 @@ public class PlayerController : MonoBehaviour
 
     //to keep reference to the rigid body's scale
     private float gravity;
+
+    //to get access to the player sprite renderer
+    [SerializeField] private SpriteRenderer sr;
 
 
     private void Awake()
@@ -87,13 +116,15 @@ public class PlayerController : MonoBehaviour
             instance = this;
         }
 
-        playerHealth = maxPlayerHealth;
+        PlayerHealth = maxPlayerHealth;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         gravity = playerRB.gravityScale;
+        AbilityLimit = abilityLimit;
+        abilityStorage.fillAmount = AbilityLimit;
     }
 
     //this will just be creating the range for the attack spaces for the player
@@ -115,6 +146,15 @@ public class PlayerController : MonoBehaviour
         Flip();
         StartDash();
         Attack();
+        RestoreTimeScale();
+        FlashWhileInvincible();
+        Heal();
+    }
+
+    private void FixedUpdate()
+    {
+        if (pState.dashing) return;
+        Recoil();
     }
 
     //getting the input on the horizontal plane from the player
@@ -122,13 +162,15 @@ public class PlayerController : MonoBehaviour
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         yAxis = Input.GetAxisRaw("Vertical");
-        attack = Input.GetMouseButtonDown(0);//the left click for attacking
+        attack = Input.GetButtonDown("Attack");//the left click for attacking
     }
 
     //making the player move according to the player's input
     private void Move()
     {
         playerRB.linearVelocity = new Vector2(walkSpeed * xAxis, playerRB.linearVelocity.y);
+        //to go between the walking and idle animations
+        anim.SetBool("isWalking", playerRB.linearVelocity.x != 0 && Grounded());
     }
 
     //take note, this might make the player dash in the air when not grounded,
@@ -202,7 +244,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //when the player does hit an object
-    private void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
         List<PMEnemyScript> hitEnemies = new List<PMEnemyScript>();
@@ -219,6 +261,11 @@ public class PlayerController : MonoBehaviour
             {
                 e.EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
                 hitEnemies.Add(e);
+
+                if (objectsToHit[i].CompareTag("Enemy"))
+                {
+                    AbilityLimit += abilityGain;
+                }
             }
         }
     }
@@ -305,24 +352,120 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        playerHealth -= Mathf.RoundToInt(_damage);
+        PlayerHealth -= Mathf.RoundToInt(_damage);
         StartCoroutine(StopTakingDamage());
     }
 
     IEnumerator StopTakingDamage()
     {
         pState.invincibleFrames = true;
+        GameObject _bloodSpurtParticles = Instantiate(bloodSpurt, transform.position, Quaternion.identity);
+        Destroy(_bloodSpurtParticles, 1.5f);
         anim.SetTrigger("TakeDamage");
-        ClampHealth();
         yield return new WaitForSeconds(1f);
         pState.invincibleFrames = false;
     }
 
-    //to make sure the health can't go past max or min
-    void ClampHealth()
+    void FlashWhileInvincible()
     {
-                                  //health      min    max
-        playerHealth = Mathf.Clamp(playerHealth, 0, maxPlayerHealth);
+        sr.material.color = pState.invincibleFrames ? 
+            Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time * hitFlashSpeed, 1.0f)) : Color.white;
+    }
+
+    void RestoreTimeScale()
+    {
+        if (restoreTime)
+        {
+            if (Time.timeScale < 1)
+            {
+                Time.timeScale += Time.unscaledDeltaTime * restoreTimeSpeed;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                restoreTime = false;
+            }
+        }
+    }
+
+    public void HitStopTime(float _newTimeScale, int _restoreSpeed, float _delay)
+    {
+        restoreTimeSpeed = _restoreSpeed;
+        Time.timeScale = _newTimeScale;
+
+        if (_delay > 0)
+        {
+            StopCoroutine(StartTimeAgain(_delay));
+            StartCoroutine(StartTimeAgain(_delay));
+        }
+        else
+        {
+            restoreTime = true;
+        }
+    }
+
+    IEnumerator StartTimeAgain(float _delay)
+    {
+        yield return new WaitForSecondsRealtime(_delay);
+        restoreTime = true;
+        
+    }
+
+    public int PlayerHealth
+    {
+        get { return playerHealth; }
+        set
+        {
+            if (playerHealth != value)
+            {
+                playerHealth = Mathf.Clamp(value, 0, maxPlayerHealth);
+
+                if (onHealthChangedCallback != null)
+                {
+                    onHealthChangedCallback.Invoke();
+                }
+            }
+        }
+    }
+
+    void Heal()
+    {
+        if (Input.GetButton("Healing") && PlayerHealth < maxPlayerHealth && AbilityLimit > 0 && !pState.dashing)
+        {
+           pState.healing = true;
+            anim.SetBool("isHealing", true);
+
+            //healing
+            healTimer += Time.deltaTime;
+            if (healTimer >= timeToHeal)
+            {
+                PlayerHealth++;
+                healTimer = 0;
+            }
+
+            //drain ability limit
+            AbilityLimit -= Time.deltaTime * abilityDrainSpeed;
+        }
+        else
+        {
+            pState.healing = false;
+            anim.SetBool("isHealing", false);
+            healTimer = 0;
+        }
+    }
+
+    float AbilityLimit
+    {
+        get { return abilityLimit; }
+        set
+        {
+            //if ability limits change
+            if (abilityLimit != value)
+            {
+                abilityLimit = Mathf.Clamp(value, 0, 1);
+                abilityStorage.fillAmount = AbilityLimit;
+            }
+        }
     }
 
     //flipping the sprite corresponding to the direction(will be helpful when actual sprites are added

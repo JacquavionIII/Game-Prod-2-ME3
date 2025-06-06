@@ -33,6 +33,18 @@ public class PMEnemyScript : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (isRecoiling)
+        {
+            if (recoilTimer < recoilLength)
+            {
+                recoilTimer += Time.deltaTime;
+            }
+            else
+            {
+                isRecoiling = false;
+                recoilTimer = 0;
+            }
+        }
     }
 
     public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
@@ -56,11 +68,12 @@ public class PMEnemyScript : MonoBehaviour
             }
         }
     }
-    protected void OnTriggerStay2D(Collider2D _other)
+    protected void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames)
+        if (_other.gameObject.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames)
         {
             Attack();
+            PlayerController.instance.HitStopTime(0, 5, 0.5f);
         }
     }
 

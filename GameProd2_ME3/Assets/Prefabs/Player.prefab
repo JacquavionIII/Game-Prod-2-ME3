@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 2578787393592883601}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -350,12 +350,23 @@ MonoBehaviour:
   dashSpeed: 70
   dashTime: 0.2
   dashCooldown: 0.35
+  timeBetweenAttack: 1
   sideAttackTransform: {fileID: 6629563657533082349}
   upAttackTransform: {fileID: 5361973376601226210}
   downAttackTransform: {fileID: 8910887390559372706}
   sideAttackArea: {x: 4.5, y: 3.5}
   upAttackArea: {x: 3.5, y: 4.5}
   downAttackArea: {x: 3.5, y: 4.5}
+  attackableLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  damage: 2
+  recoilXSteps: 5
+  recoilYSteps: 5
+  recoilXSpeed: 100
+  recoilYSpeed: 100
+  playerHealth: 0
+  maxPlayerHealth: 10
 --- !u!95 &5514304685939673105
 Animator:
   serializedVersion: 7
@@ -391,3 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashing: 0
+  recoilingX: 0
+  recoilingY: 0
+  lookingRight: 1
+  invincibleFrames: 0
