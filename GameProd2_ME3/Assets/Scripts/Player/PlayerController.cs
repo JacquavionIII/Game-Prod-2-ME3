@@ -141,12 +141,12 @@ public class PlayerController : MonoBehaviour
     {
         GetInputs();
 
+        RestoreTimeScale();
         if (pState.dashing) return;
         Move();
         Flip();
         StartDash();
         Attack();
-        RestoreTimeScale();
         FlashWhileInvincible();
         Heal();
     }

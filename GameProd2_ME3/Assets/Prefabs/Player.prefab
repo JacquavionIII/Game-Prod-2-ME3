@@ -367,6 +367,14 @@ MonoBehaviour:
   recoilYSpeed: 100
   playerHealth: 0
   maxPlayerHealth: 10
+  bloodSpurt: {fileID: 277453891098876018, guid: 9096b6d1bc481a24f91f1772bfde0bb4, type: 3}
+  hitFlashSpeed: 1
+  timeToHeal: 1
+  abilityStorage: {fileID: 0}
+  abilityLimit: 0.5
+  abilityDrainSpeed: 0.2
+  abilityGain: 0.3
+  sr: {fileID: 5826356392672484761}
 --- !u!95 &5514304685939673105
 Animator:
   serializedVersion: 7
@@ -406,3 +414,4 @@ MonoBehaviour:
   recoilingY: 0
   lookingRight: 1
   invincibleFrames: 0
+  healing: 0
