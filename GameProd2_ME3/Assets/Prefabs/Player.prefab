@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726466167780535802}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.16, y: 0.16, z: 0.16}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5422849961467705458}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!212 &5826356392672484761
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 6545629330152502730, guid: 28b3c04b6f9a8f0408cbbf584c87746e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -313,7 +313,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 9.8
+  m_GravityScale: 9.5
   m_Material: {fileID: 6200000, guid: 8a0a3360291d3a246b6a189e9f5fd0b6, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRB: {fileID: 6531011393712092428}
-  walkSpeed: 10
+  walkSpeed: 7
   anim: {fileID: 5514304685939673105}
   groundCheckPoint: {fileID: 8257275339697169961}
   groundCheckY: 0.2
@@ -347,7 +347,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   pState: {fileID: 2578787393592883601}
-  dashSpeed: 70
+  dashSpeed: 50
   dashTime: 0.2
   dashCooldown: 0.35
   timeBetweenAttack: 1
@@ -363,17 +363,17 @@ MonoBehaviour:
   damage: 2
   recoilXSteps: 5
   recoilYSteps: 5
-  recoilXSpeed: 100
-  recoilYSpeed: 100
+  recoilXSpeed: 50
+  recoilYSpeed: 50
   playerHealth: 0
   maxPlayerHealth: 10
   bloodSpurt: {fileID: 277453891098876018, guid: 9096b6d1bc481a24f91f1772bfde0bb4, type: 3}
   hitFlashSpeed: 1
   timeToHeal: 1
   abilityStorage: {fileID: 0}
-  abilityLimit: 0.5
+  abilityLimit: 0
   abilityDrainSpeed: 0.2
-  abilityGain: 0.3
+  abilityGain: 0.1
   sr: {fileID: 5826356392672484761}
 --- !u!95 &5514304685939673105
 Animator:

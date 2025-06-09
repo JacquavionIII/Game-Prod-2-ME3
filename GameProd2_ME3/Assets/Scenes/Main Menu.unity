@@ -428,10 +428,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3292127896253177011, guid: bb6eed2a695876e469b8d09d2e7bea0b, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7840061282334490124, guid: bb6eed2a695876e469b8d09d2e7bea0b, type: 3}
       propertyPath: m_Name
       value: Main Menu
