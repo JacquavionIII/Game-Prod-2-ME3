@@ -95,8 +95,12 @@ public class PlayerController : MonoBehaviour
 
     [Space(5)]
 
-    [Header("Ability settings")]
-
+    [Header("Ability cast settings")]
+    [SerializeField] float abilityCastCost = 0.3f;
+    [SerializeField] float timeBetweenCast = 0.5f;
+    [SerializeField] float abilityDamage;
+    [SerializeField] GameObject sideCastFireball;
+    float timeSinceCast;
     [Space(5)]
 
     //the bool for if the player is dashing
@@ -122,6 +126,7 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
         }
+        DontDestroyOnLoad(gameObject);
 
         PlayerHealth = maxPlayerHealth;
     }
@@ -151,11 +156,22 @@ public class PlayerController : MonoBehaviour
         RestoreTimeScale();
         if (pState.dashing) return;
         Move();
+        FlashWhileInvincible();
+        Heal();
+        CastAbility();
+
+        if (pState.healing) return;
         Flip();
         StartDash();
         Attack();
-        FlashWhileInvincible();
-        Heal();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<PMEnemyScript>() != null && pState.casting)
+        {
+            other.GetComponent<PMEnemyScript>().EnemyHit(abilityDamage, (other.transform.position - transform.position).normalized, -recoilYSpeed);
+        }
     }
 
     private void FixedUpdate()
@@ -175,6 +191,7 @@ public class PlayerController : MonoBehaviour
     //making the player move according to the player's input
     private void Move()
     {
+        if (pState.healing) playerRB.linearVelocity = new Vector2(0, 0);
         playerRB.linearVelocity = new Vector2(walkSpeed * xAxis, playerRB.linearVelocity.y);
         //to go between the walking and idle animations
         anim.SetBool("isWalking", playerRB.linearVelocity.x != 0 && Grounded());
@@ -204,10 +221,11 @@ public class PlayerController : MonoBehaviour
 
         //The following is for when the animations come into play
         pState.dashing = true; //this is from the pState script made in part 2 of the tutorial series
-        //anim.SetTrigger("Dashing"); //the reference to the animator controller        
+        anim.SetTrigger("Dashing"); //the reference to the animator controller        
 
         playerRB.gravityScale = 0;
-        playerRB.linearVelocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+        int _dir = pState.lookingRight ? 1 : -1;
+        playerRB.linearVelocity = new Vector2(_dir * dashSpeed, 0);
         yield return new WaitForSeconds(dashTime);
         playerRB.gravityScale = gravity;
         pState.dashing = false;
@@ -443,8 +461,9 @@ public class PlayerController : MonoBehaviour
 
     void Heal()
     {
-        if (Input.GetButton("Healing") && PlayerHealth < maxPlayerHealth && AbilityLimit > 0 && !pState.dashing)
+        if (Input.GetButton("Healing") && PlayerHealth < maxPlayerHealth && AbilityLimit > 0 && Grounded() && !pState.dashing)
         {
+            Debug.Log("Heal button pressed");
            pState.healing = true;
             anim.SetBool("isHealing", true);
 
@@ -467,6 +486,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    //to keep a limit to how much the player can do
     float AbilityLimit
     {
         get { return abilityLimit; }
@@ -479,6 +500,50 @@ public class PlayerController : MonoBehaviour
                 abilityStorage.fillAmount = AbilityLimit;
             }
         }
+    }
+
+    void CastAbility()
+    {
+        if (Input.GetButtonDown("CastAbility") && timeSinceCast >= timeBetweenCast && AbilityLimit >= abilityCastCost)
+        {
+            pState.casting = true;
+            timeSinceCast = 0;
+            StartCoroutine(CastCoroutine());
+        }
+        else
+        {
+            timeSinceCast += Time.deltaTime;
+        }
+    }
+
+    IEnumerator CastCoroutine()
+    {
+        anim.SetBool("isCasting", true);
+        //this time will be for AFTER the prep phase of the cast animation is done
+        yield return new WaitForSeconds(0.15f);
+
+        //side cast
+        if (yAxis == 0 || (yAxis < 0 && Grounded()))
+        {
+            GameObject _fireBall = Instantiate(sideCastFireball, sideAttackTransform.position, Quaternion.identity);
+
+            //flip fireball
+            if (pState.lookingRight)
+            {
+                _fireBall.transform.eulerAngles = Vector3.zero; //if facing right, plays the animation as normal
+            }
+            else
+            {
+                _fireBall.transform.eulerAngles = new Vector2(_fireBall.transform.eulerAngles.x, 180); //if the player's not facing right
+            }
+            pState.recoilingX = true;
+        }
+
+        AbilityLimit -= abilityCastCost;
+        //dependent on the amount of time from the CASTING point until the end of the animation
+        yield return new WaitForSeconds(0.35f);
+        anim.SetBool("isCasting", false);
+        pState.casting = false;
     }
 
     //flipping the sprite corresponding to the direction(will be helpful when actual sprites are added

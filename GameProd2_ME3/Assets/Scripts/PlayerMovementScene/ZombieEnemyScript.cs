@@ -5,12 +5,8 @@ public class ZombieEnemyScript : PMEnemyScript
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
+        base.Start();
         enemyRB.gravityScale = 12f;
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
     }
 
     // Update is called once per frame

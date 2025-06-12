@@ -18,10 +18,6 @@ public class PMEnemyScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
-        
-    }
-    protected virtual void Awake()
-    {
         enemyRB = GetComponent<Rigidbody2D>();
         playerController = PlayerController.instance;
     }

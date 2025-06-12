@@ -5594,9 +5594,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: abilityLimit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: abilityDamage
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
       propertyPath: abilityStorage
       value: 
       objectReference: {fileID: 2072039797}
+    - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: maxPlayerHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: sideCastFireball
+      value: 
+      objectReference: {fileID: 5097987311109731687, guid: eb9e4c1a94051fe499dd668c47049979, type: 3}
     - target: {fileID: 5422849961467705458, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5636,6 +5652,10 @@ PrefabInstance:
     - target: {fileID: 5422849961467705458, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629563657533082349, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.29
       objectReference: {fileID: 0}
     - target: {fileID: 7725778015227442190, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
       propertyPath: m_Name
