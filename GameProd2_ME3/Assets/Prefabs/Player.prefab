@@ -350,7 +350,7 @@ MonoBehaviour:
   dashSpeed: 50
   dashTime: 0.2
   dashCooldown: 0.35
-  timeBetweenAttack: 1
+  timeBetweenAttack: 0.5
   sideAttackTransform: {fileID: 6629563657533082349}
   upAttackTransform: {fileID: 5361973376601226210}
   downAttackTransform: {fileID: 8910887390559372706}
@@ -360,11 +360,10 @@ MonoBehaviour:
   attackableLayer:
     serializedVersion: 2
     m_Bits: 512
-  damage: 2
-  recoilXSteps: 5
-  recoilYSteps: 5
+  damage: 1
   recoilXSpeed: 50
   recoilYSpeed: 50
+  enemyHitRecoilStrength: 100
   playerHealth: 0
   maxPlayerHealth: 10
   bloodSpurt: {fileID: 277453891098876018, guid: 9096b6d1bc481a24f91f1772bfde0bb4, type: 3}
@@ -415,3 +414,4 @@ MonoBehaviour:
   lookingRight: 1
   invincibleFrames: 0
   healing: 0
+  casting: 0

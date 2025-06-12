@@ -7,4 +7,5 @@ public class PlayerStateList : MonoBehaviour
     public bool lookingRight;
     public bool invincibleFrames;
     public bool healing;
+    public bool casting;
 }

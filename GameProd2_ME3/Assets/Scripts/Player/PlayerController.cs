@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     //getting player input as a float
     private float xAxis, yAxis;
 
-    //the animator controller, NOTE!! We need to iterate it for part one and two of the tutorial on 8 June for when animations are made
+    //the animator controller
     [SerializeField] private Animator anim;
 
     [Header("Ground Check Settings")]
@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     //to access the playerstatelist script
     [SerializeField] public PlayerStateList pState;
+
     [Space(5)]
 
     [Header("Dash settings")]
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
+
     [Space(5)]
 
     [Header("Attacking")]
@@ -56,14 +58,15 @@ public class PlayerController : MonoBehaviour
 
     //the below will be once the slashEffect animation is made
     // [SerializeField] GameObject slashEffect;
-    [Space(5)]
+    [Space(5)]   
 
     [Header("Recoil")]
-    [SerializeField] int recoilXSteps = 5;
-    [SerializeField] int recoilYSteps = 5;
+    // [SerializeField] int recoilXSteps = 5;
+    // [SerializeField] int recoilYSteps = 5;
     [SerializeField] float recoilXSpeed = 100;
     [SerializeField] float recoilYSpeed = 100;
-    int stepsXRecoiled, stepsYRecoiled;
+    [SerializeField] float enemyHitRecoilStrength;
+    // int stepsXRecoiled, stepsYRecoiled;
     [Space(5)]
 
     [Header("Player Health Settings")]
@@ -89,6 +92,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float abilityLimit;
     [SerializeField] float abilityDrainSpeed;
     [SerializeField] float abilityGain;
+
+    [Space(5)]
+
+    [Header("Ability settings")]
 
     [Space(5)]
 
@@ -153,8 +160,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (pState.dashing) return;
-        Recoil();
+        //if (pState.dashing) return;
+        //Recoil();
     }
 
     //getting the input on the horizontal plane from the player
@@ -244,7 +251,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //when the player does hit an object
-    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool recoilingX, float _recoilStrength /*ref bool _recoilDir,*/)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
         List<PMEnemyScript> hitEnemies = new List<PMEnemyScript>();
@@ -252,7 +259,7 @@ public class PlayerController : MonoBehaviour
         if (objectsToHit.Length > 0)
         {
             Debug.Log("Hit object");
-            _recoilDir = true;
+            //_recoilDir = true;
         }
         for (int i = 0; i < objectsToHit.Length; i++) //detecting if an enemy is in the range of the attack
         {
@@ -279,6 +286,10 @@ public class PlayerController : MonoBehaviour
         _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
     }
     */
+
+    //the below would be if we wanted to recoil the player back when hitting an enemy
+
+    /*
 
     void Recoil()
     {
@@ -349,6 +360,8 @@ public class PlayerController : MonoBehaviour
         stepsYRecoiled = 0;
         pState.recoilingY = false;
     }
+
+    */
 
     public void TakeDamage(float _damage)
     {
