@@ -3,10 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 //the player movement script to walk/attack
 public class PlayerController : MonoBehaviour
 {
+    [Header("Input System")]
+    [SerializeField] public InputActionAsset inputActions;
+
+    [Header("Input System Actions")]
+    private InputAction m_moveAction;
+    private InputAction m_attackAction;
+    private InputAction m_interactAction;
+    private InputAction m_dashAction;
+    private InputAction m_healAction;
+
+    private Vector2 m_moveAmt;
+
     [Header("Horizontal Movement Settings")]
     //the player rigid body
     [SerializeField] private Rigidbody2D playerRB;
@@ -96,11 +109,7 @@ public class PlayerController : MonoBehaviour
     [Space(5)]
 
     [Header("Ability cast settings")]
-    [SerializeField] float abilityCastCost = 0.3f;
-    [SerializeField] float timeBetweenCast = 0.5f;
     [SerializeField] float abilityDamage;
-    [SerializeField] GameObject sideCastFireball;
-    float timeSinceCast;
     [Space(5)]
 
     //the bool for if the player is dashing
@@ -115,8 +124,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer sr;
 
 
+    //the following is pertaining to activating the input system:
+
+    private void OnEnable()
+    {
+        inputActions.FindActionMap("Player").Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.FindActionMap("Player").Disable();
+    }
+
     private void Awake()
     {
+        //getting the actions
+        m_moveAction = InputSystem.actions.FindAction("Move");
+        m_attackAction = InputSystem.actions.FindAction("Attack");
+        m_interactAction = InputSystem.actions.FindAction("Interact");
+        m_dashAction = InputSystem.actions.FindAction("Dash");
+        m_healAction = InputSystem.actions.FindAction("Healing");
+
         //to ensure there aren't any other players
         if (instance != null && instance != this)
         {
@@ -158,7 +186,6 @@ public class PlayerController : MonoBehaviour
         Move();
         FlashWhileInvincible();
         Heal();
-        CastAbility();
 
         if (pState.healing) return;
         Flip();
@@ -185,7 +212,7 @@ public class PlayerController : MonoBehaviour
     {
         xAxis = Input.GetAxisRaw("Horizontal");
         yAxis = Input.GetAxisRaw("Vertical");
-        attack = Input.GetButtonDown("Attack");//the left click for attacking
+        attack = m_attackAction.IsPressed();
     }
 
     //making the player move according to the player's input
@@ -201,7 +228,7 @@ public class PlayerController : MonoBehaviour
     //so might need to go back to part 1 to set the grounded variable stuff
     void StartDash()
     {
-        if (Input.GetButtonDown("Dash") && canDash && !dashed)
+        if (m_dashAction.WasPressedThisFrame() && canDash && !dashed)
         {
             Debug.Log("Dash is pressed");
             StartCoroutine(Dash());
@@ -500,50 +527,6 @@ public class PlayerController : MonoBehaviour
                 abilityStorage.fillAmount = AbilityLimit;
             }
         }
-    }
-
-    void CastAbility()
-    {
-        if (Input.GetButtonDown("CastAbility") && timeSinceCast >= timeBetweenCast && AbilityLimit >= abilityCastCost)
-        {
-            pState.casting = true;
-            timeSinceCast = 0;
-            StartCoroutine(CastCoroutine());
-        }
-        else
-        {
-            timeSinceCast += Time.deltaTime;
-        }
-    }
-
-    IEnumerator CastCoroutine()
-    {
-        anim.SetBool("isCasting", true);
-        //this time will be for AFTER the prep phase of the cast animation is done
-        yield return new WaitForSeconds(0.15f);
-
-        //side cast
-        if (yAxis == 0 || (yAxis < 0 && Grounded()))
-        {
-            GameObject _fireBall = Instantiate(sideCastFireball, sideAttackTransform.position, Quaternion.identity);
-
-            //flip fireball
-            if (pState.lookingRight)
-            {
-                _fireBall.transform.eulerAngles = Vector3.zero; //if facing right, plays the animation as normal
-            }
-            else
-            {
-                _fireBall.transform.eulerAngles = new Vector2(_fireBall.transform.eulerAngles.x, 180); //if the player's not facing right
-            }
-            pState.recoilingX = true;
-        }
-
-        AbilityLimit -= abilityCastCost;
-        //dependent on the amount of time from the CASTING point until the end of the animation
-        yield return new WaitForSeconds(0.35f);
-        anim.SetBool("isCasting", false);
-        pState.casting = false;
     }
 
     //flipping the sprite corresponding to the direction(will be helpful when actual sprites are added
