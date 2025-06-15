@@ -1,13 +1,11 @@
 using UnityEngine;
 
-
-//the script for the fireball object
-public class FireBallScript : MonoBehaviour
+public class Fireball : MonoBehaviour
 {
     [SerializeField] float damage;
     [SerializeField] float hitForce;
     [SerializeField] int speed;
-    [SerializeField] float lifeTime = 1f;//1 second passed
+    [SerializeField] float lifeTime = 1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,11 +18,11 @@ public class FireBallScript : MonoBehaviour
         transform.position += speed * transform.right;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D _other)
     {
-        if (other.tag == "Enemy")
+        if (_other.tag == "Enemy")
         {
-            other.GetComponent<PMEnemyScript>().EnemyHit(damage, (other.transform.position - transform.position).normalized, -hitForce);
+            _other.GetComponent<EnemyScript>().EnemyHit(damage, (_other.transform.position - transform.position).normalized, -hitForce);
         }
     }
 }

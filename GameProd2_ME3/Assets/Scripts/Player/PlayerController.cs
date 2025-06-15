@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
+    [SerializeField] GameObject dashEffect;
 
     [Space(5)]
 
@@ -143,7 +144,7 @@ public class PlayerController : MonoBehaviour
         m_attackAction = InputSystem.actions.FindAction("Attack");
         m_interactAction = InputSystem.actions.FindAction("Interact");
         m_dashAction = InputSystem.actions.FindAction("Dash");
-        m_healAction = InputSystem.actions.FindAction("Healing");
+        m_healAction = InputSystem.actions.FindAction("DoAbility");
 
         //to ensure there aren't any other players
         if (instance != null && instance != this)
@@ -184,8 +185,9 @@ public class PlayerController : MonoBehaviour
         RestoreTimeScale();
         if (pState.dashing) return;
         Move();
-        FlashWhileInvincible();
+        FlashWhileInvincible();                
         Heal();
+        
 
         if (pState.healing) return;
         Flip();
@@ -195,9 +197,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<PMEnemyScript>() != null && pState.casting)
+        if (other.GetComponent<EnemyScript>() != null && pState.casting)
         {
-            other.GetComponent<PMEnemyScript>().EnemyHit(abilityDamage, (other.transform.position - transform.position).normalized, -recoilYSpeed);
+            other.GetComponent<EnemyScript>().EnemyHit(abilityDamage, (other.transform.position - transform.position).normalized, -recoilYSpeed);
         }
     }
 
@@ -253,6 +255,7 @@ public class PlayerController : MonoBehaviour
         playerRB.gravityScale = 0;
         int _dir = pState.lookingRight ? 1 : -1;
         playerRB.linearVelocity = new Vector2(_dir * dashSpeed, 0);
+        if (Grounded()) Instantiate(dashEffect, transform);
         yield return new WaitForSeconds(dashTime);
         playerRB.gravityScale = gravity;
         pState.dashing = false;
@@ -299,7 +302,7 @@ public class PlayerController : MonoBehaviour
     void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool recoilingX, float _recoilStrength /*ref bool _recoilDir,*/)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
-        List<PMEnemyScript> hitEnemies = new List<PMEnemyScript>();
+        List<EnemyScript> hitEnemies = new List<EnemyScript>();
 
         if (objectsToHit.Length > 0)
         {
@@ -308,7 +311,7 @@ public class PlayerController : MonoBehaviour
         }
         for (int i = 0; i < objectsToHit.Length; i++) //detecting if an enemy is in the range of the attack
         {
-            PMEnemyScript e = objectsToHit[i].GetComponent<PMEnemyScript>();
+            EnemyScript e = objectsToHit[i].GetComponent<EnemyScript>();
             if (e && !hitEnemies.Contains(e))
             {
                 e.EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
@@ -488,10 +491,10 @@ public class PlayerController : MonoBehaviour
 
     void Heal()
     {
-        if (Input.GetButton("Healing") && PlayerHealth < maxPlayerHealth && AbilityLimit > 0 && Grounded() && !pState.dashing)
+        if (m_healAction.IsInProgress() && PlayerHealth < maxPlayerHealth && AbilityLimit > 0 && Grounded() && !pState.dashing)
         {
             Debug.Log("Heal button pressed");
-           pState.healing = true;
+            pState.healing = true;
             anim.SetBool("isHealing", true);
 
             //healing

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PMEnemyScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour
 {
     [SerializeField] protected float health;
     [SerializeField] protected float recoilLength;
