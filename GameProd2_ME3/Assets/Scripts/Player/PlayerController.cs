@@ -109,9 +109,16 @@ public class PlayerController : MonoBehaviour
 
     [Space(5)]
 
+    /*
     [Header("Ability cast settings")]
+    [SerializeField] float abilityCost = 0.3f;
+    [SerializeField] float timeBetweenCast;
+    float timeSinceCast = 0.5f;
     [SerializeField] float abilityDamage;
+
+    [SerializeField] GameObject sideAbilityFireball;
     [Space(5)]
+    */
 
     //the bool for if the player is dashing
     private bool canDash = true;
@@ -193,14 +200,6 @@ public class PlayerController : MonoBehaviour
         Flip();
         StartDash();
         Attack();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.GetComponent<EnemyScript>() != null && pState.casting)
-        {
-            other.GetComponent<EnemyScript>().EnemyHit(abilityDamage, (other.transform.position - transform.position).normalized, -recoilYSpeed);
-        }
     }
 
     private void FixedUpdate()

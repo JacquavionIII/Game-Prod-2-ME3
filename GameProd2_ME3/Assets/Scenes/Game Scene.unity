@@ -1418,6 +1418,10 @@ PrefabInstance:
       propertyPath: sideCastFireball
       value: 
       objectReference: {fileID: 5097987311109731687, guid: eb9e4c1a94051fe499dd668c47049979, type: 3}
+    - target: {fileID: 4460033975678141804, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
+      propertyPath: sideAbilityFireball
+      value: 
+      objectReference: {fileID: 4669333463152246892, guid: eb9e4c1a94051fe499dd668c47049979, type: 3}
     - target: {fileID: 5422849961467705458, guid: 22df9c8102ea7284d8ca7128c3b42459, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
