@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
     //the bool for if the player is dashing
     private bool canDash = true;
     //bool to make sure the player only dashes once and not continuously
+    //it's public now to enable controller rumble
     private bool dashed;
 
     //to keep reference to the rigid body's scale

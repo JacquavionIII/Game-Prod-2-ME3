@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 944603297328549793}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.75, y: 0, z: 0}
+  m_LocalPosition: {x: 3.29, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -337,8 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0d6cd3eb8ff774f9d11401f70ec74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   playerRB: {fileID: 6531011393712092428}
-  walkSpeed: 7
+  walkSpeed: 5
   anim: {fileID: 5514304685939673105}
   groundCheckPoint: {fileID: 8257275339697169961}
   groundCheckY: 0.2
@@ -347,9 +348,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   pState: {fileID: 2578787393592883601}
-  dashSpeed: 50
+  dashSpeed: 30
   dashTime: 0.2
   dashCooldown: 0.35
+  dashEffect: {fileID: 3995099425927938225, guid: 934a7d94a28995c42aead43faf0cf4d7, type: 3}
   timeBetweenAttack: 0.5
   sideAttackTransform: {fileID: 6629563657533082349}
   upAttackTransform: {fileID: 5361973376601226210}
@@ -365,14 +367,15 @@ MonoBehaviour:
   recoilYSpeed: 50
   enemyHitRecoilStrength: 100
   playerHealth: 0
-  maxPlayerHealth: 10
+  maxPlayerHealth: 5
   bloodSpurt: {fileID: 277453891098876018, guid: 9096b6d1bc481a24f91f1772bfde0bb4, type: 3}
   hitFlashSpeed: 1
   timeToHeal: 1
   abilityStorage: {fileID: 0}
-  abilityLimit: 0
+  abilityLimit: 1
   abilityDrainSpeed: 0.2
   abilityGain: 0.1
+  dashed: 0
   sr: {fileID: 5826356392672484761}
 --- !u!95 &5514304685939673105
 Animator:
