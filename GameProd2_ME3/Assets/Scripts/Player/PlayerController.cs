@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
     float restoreTimeSpeed;
 
     //the below will be once the slashEffect animation is made
-    // [SerializeField] GameObject slashEffect;
+    [SerializeField] GameObject slashEffect;
     [Space(5)]   
 
     [Header("Recoil")]
@@ -279,7 +279,7 @@ public class PlayerController : MonoBehaviour
                 Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
 
                 //with the slash effect animation prefab
-                //Instantiate(slashEffect, sideAttackTransform);
+                Instantiate(slashEffect, sideAttackTransform);
             }
             else if (yAxis > 0) //if player holds W or Up
             {

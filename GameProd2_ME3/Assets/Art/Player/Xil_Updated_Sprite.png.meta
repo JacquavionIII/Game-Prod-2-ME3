@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 28b3c04b6f9a8f0408cbbf584c87746e
+guid: 72a952697f5bd484d94cd940c894fee4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6545629330152502730
-    second: Xil_quater_profile_0
+      213: -6452271244434168352
+    second: Xil_Updated_Sprite_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Xil_quater_profile_0
+      name: Xil_Updated_Sprite_0
       rect:
         serializedVersion: 2
-        x: 837
-        y: 182
-        width: 300
-        height: 676
+        x: 115
+        y: 3
+        width: 73
+        height: 170
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ac53e1f023fb6da50800000000000000
-      internalID: 6545629330152502730
+      spriteID: 0e5a8012d7de476a0800000000000000
+      internalID: -6452271244434168352
       vertices: []
       indices: 
       edges: []

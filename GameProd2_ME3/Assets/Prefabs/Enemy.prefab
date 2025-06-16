@@ -129,9 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd47656924e1a24f9d34093511448d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 8
+  health: 4
   recoilLength: 2
-  recoilFactor: 10
+  recoilFactor: 15
   isRecoiling: 0
   playerController: {fileID: 0}
   Speed: 1
