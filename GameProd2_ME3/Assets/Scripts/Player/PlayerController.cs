@@ -155,6 +155,7 @@ public class PlayerController : MonoBehaviour
         m_healAction = InputSystem.actions.FindAction("DoAbility");
 
         //to ensure there aren't any other players
+
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -163,7 +164,7 @@ public class PlayerController : MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         PlayerHealth = maxPlayerHealth;
     }
