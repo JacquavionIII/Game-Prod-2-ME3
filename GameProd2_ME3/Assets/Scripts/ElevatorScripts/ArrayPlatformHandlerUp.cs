@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //this script is for the array management for the platforms
-public class ArrayPlatformHandler : MonoBehaviour
+public class ArrayPlatformHandlerUp : MonoBehaviour
 {
     //Reference:
     //Title: Unity Beginners - How to use Arrays 
@@ -20,15 +20,15 @@ public class ArrayPlatformHandler : MonoBehaviour
     void Update()
     {
         //this is to find the platform game object as it is instantiated
-        platform = GameObject.FindGameObjectWithTag("Platform");
+        platform = GameObject.FindGameObjectWithTag("PlatformUp");
         //this is to get the script to call the deadzone method from the PlatformMoveScript
-        platformMoveScript = GameObject.FindGameObjectWithTag("Platform").GetComponent<PlatformMoveScript>();
+        platformMoveScript = GameObject.FindGameObjectWithTag("PlatformUp").GetComponent<PlatformMoveScript>();
         //this is the line so that it stores the platform object into the array
-        platformArray = GameObject.FindGameObjectsWithTag("Platform");
+        platformArray = GameObject.FindGameObjectsWithTag("PlatformUp");
         //the for loop checks if it's less than the length, then it will go through the deadzone method and destroy the game object
         for (int i = 0; i < platformArray.Length; i++)
         {
-            platformMoveScript.CheckDeadZoneDown();//the checkdeadzone method from the PlatformMoveScript
+            platformMoveScript.CheckDeadZoneUp();//the checkdeadzoneUp method from the PlatformMoveScript
         }
     }
 }

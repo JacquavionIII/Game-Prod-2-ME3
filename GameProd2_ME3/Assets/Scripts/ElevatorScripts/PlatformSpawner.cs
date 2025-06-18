@@ -18,6 +18,12 @@ public class PlatformSpawner : MonoBehaviour
     public float spawnRate;//the variable for the rate at which the platforms spawn
     private float timer = 0;//this is to set a time limit between the spawn rate of the platforms between each other
 
+    //Vector3 float varaibles for each level
+    //the values below are defaulted for the game Forgotten Frequency
+    [SerializeField] private float spawnPointX = -42;
+    [SerializeField] private float spawnPointY = -29;
+    [SerializeField] private float spawnPointZ = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +48,6 @@ public class PlatformSpawner : MonoBehaviour
     //this is the method for spawning the platforms
     void spawnPlatform()
     {
-        Instantiate(platform, new Vector3(7, -6, 0), transform.rotation);//spawns the platform at the designated point
+        Instantiate(platform, new Vector3(spawnPointX, spawnPointY, spawnPointZ), transform.rotation);//spawns the platform at the designated point
     }
 }
