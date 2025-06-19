@@ -189,6 +189,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (pState.cutscene) return;
+
         GetInputs();
 
         RestoreTimeScale();
@@ -262,6 +264,24 @@ public class PlayerController : MonoBehaviour
         pState.dashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+
+    public IEnumerator WalkIntoNewScene(Vector2 _exitDir, float _delay)
+    {
+        pState.invincibleFrames = true;
+
+        //horizontal exit direction
+        if (_exitDir.x != 0)
+        {
+            xAxis = _exitDir.x > 0 ? 1 : -1;
+
+            Move();
+        }
+
+        Flip();
+        yield return new WaitForSeconds(_delay);
+        pState.invincibleFrames = false;
+        pState.cutscene = false;
     }
 
     //the attack function
