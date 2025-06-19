@@ -297,21 +297,23 @@ public class PlayerController : MonoBehaviour
 
             if (yAxis == 0 || yAxis < 0 && Grounded()) //if the player on the ground and attacking
             {
-                Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
+                int _recoilLeftOrRight = pState.lookingRight ? 1 : -1;
+
+                Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, Vector2.right * _recoilLeftOrRight, recoilXSpeed);
 
                 //with the slash effect animation prefab
                 Instantiate(slashEffect, sideAttackTransform);
             }
             else if (yAxis > 0) //if player holds W or Up
             {
-                Hit(upAttackTransform, upAttackArea, ref pState.recoilingY, recoilYSpeed);
+                Hit(upAttackTransform, upAttackArea, ref pState.recoilingY, Vector2.up, recoilYSpeed);
 
                 //with the slash effect animation prefab
                 //SlashEffectAtAngle(slashEffect, 80, upAttackTransform);
             }
             else if (yAxis < 0 && !Grounded()) //if player holds S or Down, more so for jumping
             {
-                Hit(downAttackTransform, downAttackArea, ref pState.recoilingY, recoilYSpeed);
+                Hit(downAttackTransform, downAttackArea, ref pState.recoilingY, Vector2.down, recoilYSpeed);
 
                 //with the slash effect animation prefab
                 //SlashEffectAtAngle(slashEffect, -90, downAttackTransform);
@@ -320,7 +322,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //when the player does hit an object
-    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool recoilingX, float _recoilStrength /*ref bool _recoilDir,*/)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool recoilingX, Vector2 _recoilDir, float _recoilStrength /*ref bool _recoilDir,*/)
     {
         Collider2D[] objectsToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
         List<EnemyScript> hitEnemies = new List<EnemyScript>();
@@ -335,7 +337,7 @@ public class PlayerController : MonoBehaviour
             EnemyScript e = objectsToHit[i].GetComponent<EnemyScript>();
             if (e && !hitEnemies.Contains(e))
             {
-                e.EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilStrength);
+                e.EnemyHit(damage, (transform.position - objectsToHit[i].transform.position).normalized, _recoilDir, _recoilStrength);
                 hitEnemies.Add(e);
 
                 if (objectsToHit[i].CompareTag("Enemy"))

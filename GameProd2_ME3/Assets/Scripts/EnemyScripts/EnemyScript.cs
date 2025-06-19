@@ -14,21 +14,35 @@ public class EnemyScript : MonoBehaviour
 
     protected float recoilTimer;
     protected Rigidbody2D enemyRB;
+    protected SpriteRenderer enemySR;
+
+    protected enum EnemyStates
+    {
+        //crawler
+        Crawler_Idle,
+        Crawler_Flip,
+
+        //bat
+        Bat_Idle,
+        Bat_Chase,
+        Bat_Stunned,
+        Bat_Death,
+
+    }
+
+    protected EnemyStates currentEnemyState;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
         enemyRB = GetComponent<Rigidbody2D>();
         playerController = PlayerController.instance;
+        enemySR = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
         if (isRecoiling)
         {
             if (recoilTimer < recoilLength)
@@ -41,14 +55,18 @@ public class EnemyScript : MonoBehaviour
                 recoilTimer = 0;
             }
         }
+        else
+        {
+            UpdateEnemyStates();
+        }
     }
 
-    public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
+    public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, Vector2 _recoilDir, float _hitForce)
     {
         health -= _damageDone;
         if (!isRecoiling)
         {
-            enemyRB.AddForce(-_hitForce * recoilFactor * _hitDirection);
+            enemyRB.linearVelocity = -_hitForce * recoilFactor * _hitDirection;
             isRecoiling = true;
         }
         if (isRecoiling )
@@ -64,6 +82,17 @@ public class EnemyScript : MonoBehaviour
             }
         }
     }
+
+    protected virtual void UpdateEnemyStates()
+    {
+
+    }
+
+    protected void ChangeState(EnemyStates _newState)
+    {
+        currentEnemyState = _newState;
+    }
+
     protected void OnCollisionStay2D(Collision2D _other)
     {
         if (_other.gameObject.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames)

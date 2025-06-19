@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7631470900174870660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -286,7 +286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6310056854023169187
 Transform:
   m_ObjectHideFlags: 0
@@ -366,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8766365718921570051
 RectTransform:
   m_ObjectHideFlags: 0
@@ -634,7 +634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3739389288584983784
 RectTransform:
   m_ObjectHideFlags: 0
@@ -705,6 +705,7 @@ GameObject:
   - component: {fileID: 3292127896253177011}
   - component: {fileID: 8360045182466726049}
   - component: {fileID: 200237730531025167}
+  - component: {fileID: 1786482510506922217}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -810,3 +811,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f606834ad37c04ba87c1c55627e0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1786482510506922217
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840061282334490124}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d226121613c9aae4fb8c1f4cac805df9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
