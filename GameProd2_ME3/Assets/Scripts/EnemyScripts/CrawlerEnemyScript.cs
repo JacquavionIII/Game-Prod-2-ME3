@@ -21,10 +21,10 @@ public class CrawlerEnemyScript : EnemyScript
     {
         if (health <= 0)
         {
-            Destroy(gameObject, 0.05f);
+            Death(0.05f);
         }
 
-        switch (currentEnemyState)
+        switch (GetCurrentEnemyState)
         {
             case EnemyStates.Crawler_Idle:
                 Vector3 _ledgeCheckStart = transform.localScale.x > 0 ? new Vector3(ledgeCheckX, 0) : new Vector3(-ledgeCheckX, 0);

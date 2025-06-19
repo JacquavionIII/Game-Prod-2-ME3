@@ -11,10 +11,12 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] protected float Speed;
 
     [SerializeField] protected float enemyDamage;
+    [SerializeField] protected GameObject enemyBlood;
 
     protected float recoilTimer;
     protected Rigidbody2D enemyRB;
     protected SpriteRenderer enemySR;
+    protected Animator enemyAnim;
 
     protected enum EnemyStates
     {
@@ -28,9 +30,28 @@ public class EnemyScript : MonoBehaviour
         Bat_Stunned,
         Bat_Death,
 
+        //Charger
+        Charger_Idle,
+        Charger_Surprised,
+        Charger_Charge
+
     }
 
     protected EnemyStates currentEnemyState;
+
+    protected virtual EnemyStates GetCurrentEnemyState
+    {
+        get { return currentEnemyState; }
+        set
+        {
+            if (currentEnemyState != value)
+            {
+                currentEnemyState = value;
+
+                ChangeCurrentAnimation();
+            }
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
@@ -38,6 +59,7 @@ public class EnemyScript : MonoBehaviour
         enemyRB = GetComponent<Rigidbody2D>();
         playerController = PlayerController.instance;
         enemySR = GetComponent<SpriteRenderer>();
+        enemyAnim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -66,6 +88,8 @@ public class EnemyScript : MonoBehaviour
         health -= _damageDone;
         if (!isRecoiling)
         {
+            GameObject _enemyBlood = Instantiate(enemyBlood, transform.position, Quaternion.identity);
+            Destroy(_enemyBlood, 5.5f);
             enemyRB.linearVelocity = -_hitForce * recoilFactor * _hitDirection;
             isRecoiling = true;
         }
@@ -83,19 +107,29 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    protected virtual void Death(float _destroyTime)
+    {
+        Destroy(gameObject, _destroyTime);
+    }
+
     protected virtual void UpdateEnemyStates()
+    {
+
+    }
+
+    protected virtual void ChangeCurrentAnimation()
     {
 
     }
 
     protected void ChangeState(EnemyStates _newState)
     {
-        currentEnemyState = _newState;
+        GetCurrentEnemyState = _newState;
     }
 
     protected void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.gameObject.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames)
+        if (_other.gameObject.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames && health > 0)
         {
             Attack();
             PlayerController.instance.HitStopTime(0, 5, 0.5f);

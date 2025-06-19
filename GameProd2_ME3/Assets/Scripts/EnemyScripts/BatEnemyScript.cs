@@ -18,7 +18,7 @@ public class BatEnemyScript : EnemyScript
     {
         float _dist = Vector2.Distance(transform.position, PlayerController.instance.transform.position);
 
-        switch (currentEnemyState)
+        switch (GetCurrentEnemyState)
         {
             case EnemyStates.Bat_Idle:
                 if (_dist < chaseDistance)
@@ -41,9 +41,15 @@ public class BatEnemyScript : EnemyScript
                 }
             break;
             case EnemyStates.Bat_Death:
-                
+                Death(Random.Range(5, 10));
             break;
         }
+    }
+
+    protected override void Death(float _destroyTime)
+    {
+        enemyRB.gravityScale = 12;
+        base.Death(_destroyTime);
     }
 
     public override void EnemyHit(float _damageDone, Vector2 _hitDirection, Vector2 _recoilDir, float _hitForce)
@@ -60,15 +66,27 @@ public class BatEnemyScript : EnemyScript
         }
     }
 
+    protected override void ChangeCurrentAnimation()
+    {
+        enemyAnim.SetBool("Idle", GetCurrentEnemyState == EnemyStates.Bat_Idle);
+        enemyAnim.SetBool("Chase", GetCurrentEnemyState == EnemyStates.Bat_Chase);
+        enemyAnim.SetBool("Stunned", GetCurrentEnemyState == EnemyStates.Bat_Stunned);
+
+        if (GetCurrentEnemyState == EnemyStates.Bat_Death)
+        {
+            enemyAnim.SetTrigger("Death");
+        }
+    }
+
     void FlipBat()
     {
         if (PlayerController.instance.transform.position.x < transform.position.x)
         {
-            enemySR.flipX = true;
+            enemySR.flipX = false;
         }
         else
         {
-           enemySR.flipX = false;          
+           enemySR.flipX = true;          
         }
     }
 }
