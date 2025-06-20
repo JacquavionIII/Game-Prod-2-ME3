@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  deadZone: -4
+  deadZone: -3
   dirY: -1
 --- !u!61 &-8680922433468035905
 BoxCollider2D:

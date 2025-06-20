@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FadeManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class FadeManager : MonoBehaviour
 
     private void Awake()
     {
+        deathScreen = GameObject.FindGameObjectWithTag("DeathCanvas");
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -31,15 +33,18 @@ public class FadeManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.8f);
         fadeCanvas.SetActive(false);
-        deathScreen.SetActive(true);
     }
 
     //UI shenanigans
     public IEnumerator DeactivateDeathScreen()
     {
         yield return new WaitForSeconds(0.5f);
-        deathScreen.SetActive(false);
         fadeCanvas.SetActive(true);
         StartCoroutine(sceneFader.Fade(Scenefader.FadeDirection.Out));
+    }
+
+    public void GoToSecondLevel()
+    {
+        SceneManager.LoadScene("SecondLevel");
     }
 }

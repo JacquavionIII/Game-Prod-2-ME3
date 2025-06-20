@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public Vector2 platformRespawnPoint;
 
+    [SerializeField] private GameObject deathScreen;
+
     public Vector2 benchRespawnPoint;
     [SerializeField] Bench bench;
 
@@ -22,7 +24,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
         bench = FindFirstObjectByType<Bench>();
     }
 
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
         PlayerController.instance.transform.position = benchRespawnPoint;
 
         StartCoroutine(FadeManager.instance.DeactivateDeathScreen());
+        deathScreen.SetActive(false);
         PlayerController.instance.Respawned();
     }
 }

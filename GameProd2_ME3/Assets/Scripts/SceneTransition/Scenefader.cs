@@ -46,6 +46,7 @@ public class Scenefader : MonoBehaviour
         {
             fadeOutImage.enabled = true;
 
+
             while (_alpha <= _fadeEndValue)
             {
                 SetColorImage(ref _alpha, _fadeDirection);

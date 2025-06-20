@@ -108,6 +108,9 @@ public class PlayerController : MonoBehaviour
 
     [Space(5)]
 
+    [Header("Death Screen")]
+    [SerializeField] private GameObject deathScreen;
+
     /*
     [Header("Ability cast settings")]
     [SerializeField] float abilityCost = 0.3f;
@@ -518,6 +521,8 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(0.9f);
         StartCoroutine(FadeManager.instance.ActivateDeathScreen());
+        yield return new WaitForSeconds(0.9f);
+        deathScreen.SetActive(true);
     }
 
     public void Respawned()

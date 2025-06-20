@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4740625752518210789}
   - component: {fileID: 8786797835224628837}
   m_Layer: 0
-  m_Name: ToFinalLevel
+  m_Name: ToNextScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,3 +91,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 245cd701d0a0ed640ad25eebb17a10ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextSceneName: SecondLevel
