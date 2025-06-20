@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Horizontal Movement Settings")]
     //the player rigid body
-    [SerializeField] private Rigidbody2D playerRB;
+    [SerializeField] public Rigidbody2D playerRB;
     //the player's walk speed
     [SerializeField] private float walkSpeed = 1;
     //getting player input as a float
