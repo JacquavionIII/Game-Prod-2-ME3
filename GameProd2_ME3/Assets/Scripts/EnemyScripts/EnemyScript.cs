@@ -85,6 +85,8 @@ public class EnemyScript : MonoBehaviour
 
     public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, Vector2 _recoilDir, float _hitForce)
     {
+        //playing enemy hit sound effect
+        FindFirstObjectByType<AudioManager>().PlaySound("EnemyHit");
         health -= _damageDone;
         if (!isRecoiling)
         {
@@ -109,6 +111,8 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void Death(float _destroyTime)
     {
+        //playing enemy death sound effect
+        FindFirstObjectByType<AudioManager>().PlaySound("EnemyDeath");
         Destroy(gameObject, _destroyTime);
     }
 

@@ -9,10 +9,12 @@ public class FinishGameScript : MonoBehaviour
     [SerializeField] private GameObject finishGameCanvas;
     [SerializeField] private PlayerController playerController;
 
+    public bool finalLevel;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        finalLevel = true;
     }
 
     // Update is called once per frame

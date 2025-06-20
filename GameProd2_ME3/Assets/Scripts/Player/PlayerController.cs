@@ -242,6 +242,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Dash is pressed");
             StartCoroutine(Dash());
+            //playing dash sound effect
+            FindFirstObjectByType<AudioManager>().PlaySound("PlayerDash");
             dashed = true;
         }
 
@@ -299,6 +301,8 @@ public class PlayerController : MonoBehaviour
             timeSinceAttack = 0;
             //for the animation stuff when made
             anim.SetTrigger("Attacking");
+            //playing attack whoosh sound effect
+            FindFirstObjectByType<AudioManager>().PlaySound("PlayerAttackWhoosh");
 
             if (yAxis == 0 || yAxis < 0 && Grounded()) //if the player on the ground and attacking
             {
@@ -335,6 +339,8 @@ public class PlayerController : MonoBehaviour
         if (objectsToHit.Length > 0)
         {
             Debug.Log("Hit object");
+            //playing attack hit sound effect
+            FindFirstObjectByType<AudioManager>().PlaySound("PlayerAttackHit");
             //_recoilDir = true;
         }
         for (int i = 0; i < objectsToHit.Length; i++) //detecting if an enemy is in the range of the attack
@@ -443,6 +449,8 @@ public class PlayerController : MonoBehaviour
     {
         if (pState.alive)
         {
+            //playing player hit sound effect
+            FindFirstObjectByType<AudioManager>().PlaySound("PlayerHit");
             PlayerHealth -= Mathf.RoundToInt(_damage);
             if (PlayerHealth <= 0)
             {
@@ -517,6 +525,8 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f;
         GameObject _bloodSpurtParticles = Instantiate(bloodSpurt, transform.position, Quaternion.identity);
         Destroy(_bloodSpurtParticles, 1.5f);
+        //playing death sound effect
+        FindFirstObjectByType<AudioManager>().PlaySound("PlayerDeath");
         anim.SetTrigger("isDeath");
 
         yield return new WaitForSeconds(0.9f);
@@ -558,6 +568,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Heal button pressed");
             pState.healing = true;
+            //playing player heal sound effect
+            FindFirstObjectByType<AudioManager>().PlaySound("PlayerHeal");
             anim.SetBool("isHealing", true);
 
             //healing
