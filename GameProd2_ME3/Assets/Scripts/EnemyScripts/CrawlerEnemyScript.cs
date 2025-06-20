@@ -17,6 +17,15 @@ public class CrawlerEnemyScript : EnemyScript
         enemyRB.gravityScale = 12f;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (!PlayerController.instance.pState.alive)
+        {
+            ChangeState(EnemyStates.Crawler_Idle);
+        }
+    }
+
     protected override void UpdateEnemyStates()
     {
         if (health <= 0)

@@ -132,7 +132,10 @@ public class EnemyScript : MonoBehaviour
         if (_other.gameObject.CompareTag("Player") && !PlayerController.instance.pState.invincibleFrames && health > 0)
         {
             Attack();
-            PlayerController.instance.HitStopTime(0, 5, 0.5f);
+            if (PlayerController.instance.pState.alive)
+            {
+                PlayerController.instance.HitStopTime(0, 5, 0.5f);
+            }
         }
     }
 

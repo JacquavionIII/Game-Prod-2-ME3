@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     [Header("Input System Actions")]
     private InputAction m_moveAction;
     private InputAction m_attackAction;
-    private InputAction m_interactAction;
     private InputAction m_dashAction;
     private InputAction m_healAction;
 
@@ -150,7 +149,6 @@ public class PlayerController : MonoBehaviour
         //getting the actions
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_attackAction = InputSystem.actions.FindAction("Attack");
-        m_interactAction = InputSystem.actions.FindAction("Interact");
         m_dashAction = InputSystem.actions.FindAction("Dash");
         m_healAction = InputSystem.actions.FindAction("DoAbility");
 
@@ -191,19 +189,23 @@ public class PlayerController : MonoBehaviour
     {
         if (pState.cutscene) return;
 
-        GetInputs();
+        if (pState.alive)
+        {
+            GetInputs();
+            Heal();
+        }
 
         RestoreTimeScale();
-        if (pState.dashing) return;
-        Move();
-        FlashWhileInvincible();                
-        Heal();
-        
+        if (pState.dashing || pState.healing) return;
 
-        if (pState.healing) return;
-        Flip();
-        StartDash();
-        Attack();
+        if (pState.alive)
+        {
+            Move();
+            FlashWhileInvincible();
+            Flip();
+            StartDash();
+            Attack();
+        }
     }
 
     private void FixedUpdate()
@@ -436,8 +438,19 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        PlayerHealth -= Mathf.RoundToInt(_damage);
-        StartCoroutine(StopTakingDamage());
+        if (pState.alive)
+        {
+            PlayerHealth -= Mathf.RoundToInt(_damage);
+            if (PlayerHealth <= 0)
+            {
+                PlayerHealth = 0;
+                StartCoroutine(Death());
+            }
+            else
+            {
+                StartCoroutine(StopTakingDamage());
+            }
+        }
     }
 
     IEnumerator StopTakingDamage()
@@ -493,6 +506,28 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(_delay);
         restoreTime = true;
         
+    }
+
+    IEnumerator Death()
+    {
+        pState.alive = false;
+        Time.timeScale = 1f;
+        GameObject _bloodSpurtParticles = Instantiate(bloodSpurt, transform.position, Quaternion.identity);
+        Destroy(_bloodSpurtParticles, 1.5f);
+        anim.SetTrigger("isDeath");
+
+        yield return new WaitForSeconds(0.9f);
+        StartCoroutine(FadeManager.instance.ActivateDeathScreen());
+    }
+
+    public void Respawned()
+    {
+        if (!pState.alive)
+        {
+            pState.alive = true;
+            PlayerHealth = maxPlayerHealth;
+            anim.Play("PlayerIdle");
+        }
     }
 
     public int PlayerHealth

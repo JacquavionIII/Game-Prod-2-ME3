@@ -14,6 +14,15 @@ public class BatEnemyScript : EnemyScript
         ChangeState(EnemyStates.Bat_Idle);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (!PlayerController.instance.pState.alive)
+        {
+            ChangeState(EnemyStates.Bat_Idle);
+        }
+    }
+
     protected override void UpdateEnemyStates()
     {
         float _dist = Vector2.Distance(transform.position, PlayerController.instance.transform.position);

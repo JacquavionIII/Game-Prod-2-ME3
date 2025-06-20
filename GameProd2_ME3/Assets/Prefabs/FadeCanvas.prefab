@@ -204,4 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f92f26150e951864eb16c744a8b6291b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeCanvas: {fileID: 706874701323692170}
   sceneFader: {fileID: 2712631344524265751}
+  deathScreen: {fileID: 0}
