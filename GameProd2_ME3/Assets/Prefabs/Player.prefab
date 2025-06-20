@@ -374,7 +374,7 @@ MonoBehaviour:
   hitFlashSpeed: 1
   timeToHeal: 1
   abilityStorage: {fileID: 0}
-  abilityLimit: 1
+  abilityLimit: 0
   abilityDrainSpeed: 0.2
   abilityGain: 0.1
   deathScreen: {fileID: 0}
